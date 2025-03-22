@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -14,6 +15,16 @@ public class LevelGenerator : MonoBehaviour
     private GameObject raodWaterTopPrefab;
     [SerializeField]
     private GameObject waterRoadTopPrefab;
+    [SerializeField]
+    private GameObject carRoamer;
+    [SerializeField]
+    private Transform wayPointCar1;
+    [SerializeField]
+    private Transform wayPointCar2;
+    [SerializeField]
+    private Transform wayPointCar3;
+    [SerializeField]
+    private Transform wayPointCar4;
 
     [SerializeField]
     private Transform groundGeneratedPoint;
@@ -26,7 +37,7 @@ public class LevelGenerator : MonoBehaviour
     {
         float groundMultiplayer = groundPrefab.transform.localScale.x;
         float roadMultiplayer = roadPrefab.transform.localScale.x;
-        Vector3 secondRoadOffset = new Vector3(0, 30f, 0);
+        Vector3 secondRoadOffset = new Vector3(0, 20f, 0);
         for (int i = 0; i < 50; i++)
         {
             GameObject.Instantiate(waterRoadTopPrefab, new Vector3(roadGeneratedPoint.position.x + (i * groundMultiplayer), roadGeneratedPoint.position.y - groundMultiplayer, roadGeneratedPoint.position.z), Quaternion.identity);
@@ -46,6 +57,12 @@ public class LevelGenerator : MonoBehaviour
                 GameObject.Instantiate(groundPrefab, new Vector3(groundGeneratedPoint.position.x + (i * groundMultiplayer), groundGeneratedPoint.position.y + (j * groundMultiplayer), groundGeneratedPoint.position.z), Quaternion.identity);
             }
         }
+
+        CarRoamer car1 =  GameObject.Instantiate(carRoamer, wayPointCar1.position, Quaternion.identity).GetComponent<CarRoamer>();
+        car1.waypoints = new Transform[] { wayPointCar1, wayPointCar2 };
+        CarRoamer car2 = GameObject.Instantiate(carRoamer, wayPointCar3.position, Quaternion.identity).GetComponent<CarRoamer>();
+        car2.waypoints = new Transform[] {wayPointCar3, wayPointCar4 };
+
     }
 
     // Update is called once per frame
