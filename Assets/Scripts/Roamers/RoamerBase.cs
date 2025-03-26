@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public abstract class RoamerBase : MonoBehaviour
 {
@@ -23,11 +24,19 @@ public abstract class RoamerBase : MonoBehaviour
     public float tileCheckRadius = 0.1f;
 
     protected IRoamerState currentState;
+    [SerializeField]
+    private Slider trustSlider;
+
+    private TrustMeter trustMeter;
 
     protected virtual void Start()
     {
         // Start in the normal movement state.
         SwitchState(new RoamerNormalState());
+        if (trustSlider != null)
+        {
+            trustMeter = trustSlider.GetComponent<TrustMeter>();
+        }
     }
 
     protected virtual void Update()
@@ -36,8 +45,13 @@ public abstract class RoamerBase : MonoBehaviour
         if (!IsOnValidTile())
         {
             // If not, the roamer has fallen off—destroy it.
+            trustMeter.DecreaseTrust();
             Destroy(gameObject);
             return;
+        }
+        if (Vector2.Distance(this.transform.position, waypoints[1].position) < 0.2f)
+        {
+            Destroy(this);
         }
 
         // Delegate behavior to the current state.
@@ -60,29 +74,21 @@ public abstract class RoamerBase : MonoBehaviour
     protected bool IsOnValidTile()
     {
         // Use OverlapPoint to find a tile at the roamer's position.
-        Collider2D col = Physics2D.OverlapPoint(transform.position, tileLayerMask);
-        if (col != null)
+        int combinedMask = LayerMask.GetMask("Ground") | LayerMask.GetMask("Road") | LayerMask.GetMask("WaterWay");
+        Collider2D col = Physics2D.OverlapPoint(transform.position, combinedMask);
+        if (col == null)
+            return false;
+        else
         {
             TileBase tile = col.GetComponent<TileBase>();
             if (tile != null && tile.tileType == AllowedTileType)
             {
                 return true;
             }
-        }
-        return false;
-    }
-
-    /// <summary>
-    /// When colliding with a trigger (e.g., border tile), switch to reverse state.
-    /// </summary>
-    protected virtual void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.CompareTag("BorderTile"))
-        {
-            // Only switch if not already reversing.
-            if (!(currentState is RoamerReverseState))
+            else
             {
                 SwitchState(new RoamerReverseState());
+                return true;
             }
         }
     }

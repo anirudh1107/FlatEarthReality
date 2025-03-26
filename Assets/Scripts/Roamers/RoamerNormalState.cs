@@ -17,7 +17,7 @@ public class RoamerNormalState : IRoamerState
             target.position, roamer.speed * Time.deltaTime);
 
         // If the roamer reaches the waypoint (within a tolerance)
-        if (Vector3.Distance(roamer.transform.position, target.position) < 0.1f)
+        if (Vector2.Distance(roamer.transform.position, target.position) < 0.1f)
         {
             // Record the last checkpoint
             roamer.lastCheckpointIndex = roamer.currentWaypointIndex;
