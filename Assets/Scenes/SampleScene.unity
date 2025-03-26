@@ -1088,6 +1088,7 @@ MonoBehaviour:
     spawnInterval: 3
   horizontalPrefab: {fileID: 1130751955901256793, guid: c79d63bbef53ffe4d875d0eb616665e6, type: 3}
   verticalPrefab: {fileID: 1130751955901256793, guid: c79d63bbef53ffe4d875d0eb616665e6, type: 3}
+  trustMeter: {fileID: 1623670184}
 --- !u!4 &1135750178
 Transform:
   m_ObjectHideFlags: 0

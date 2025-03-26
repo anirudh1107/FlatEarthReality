@@ -19,6 +19,16 @@ public abstract class TileBase : MonoBehaviour
     [Tooltip("Grid cell size for snapping (assumed square).")]
     public float gridSize = 1f;
 
+    public SpriteRenderer tileSpriteRenderer;
+
+    private void Start()
+    {
+        if (tileSpriteRenderer == null)
+        {
+            tileSpriteRenderer = GetComponent<SpriteRenderer>();
+        }
+    }
+
     /// <summary>
     /// Snaps the tile to the center of the nearest grid cell.
     /// </summary>

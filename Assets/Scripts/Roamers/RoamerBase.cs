@@ -22,10 +22,9 @@ public abstract class RoamerBase : MonoBehaviour
     public LayerMask tileLayerMask;
     [Tooltip("Radius for checking if the roamer is on a valid tile.")]
     public float tileCheckRadius = 0.1f;
+    public Slider trustSlider;
 
     protected IRoamerState currentState;
-    [SerializeField]
-    private Slider trustSlider;
 
     private TrustMeter trustMeter;
 
@@ -49,9 +48,9 @@ public abstract class RoamerBase : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-        if (Vector2.Distance(this.transform.position, waypoints[1].position) < 0.2f)
+        if (Vector2.Distance(this.transform.position, waypoints[1].position) < 1f)
         {
-            Destroy(this);
+            Destroy(gameObject);
         }
 
         // Delegate behavior to the current state.
@@ -87,6 +86,7 @@ public abstract class RoamerBase : MonoBehaviour
             }
             else
             {
+                Debug.Log("Roamer is on an invalid tile.");
                 SwitchState(new RoamerReverseState());
                 return true;
             }

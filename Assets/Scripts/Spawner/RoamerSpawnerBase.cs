@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public abstract class RoamerSpawnerBase : MonoBehaviour
 {
@@ -13,6 +14,10 @@ public abstract class RoamerSpawnerBase : MonoBehaviour
     public GameObject horizontalPrefab;
     [Tooltip("Prefab for vertical orientation roamer.")]
     public GameObject verticalPrefab;
+    [Tooltip("Trust Meter reference.")]
+    public Slider trustMeter;
+
+
 
     protected virtual void Start()
     {
@@ -63,9 +68,12 @@ public abstract class RoamerSpawnerBase : MonoBehaviour
 
             // If the roamer has a RoamerAI script, assign its target.
             RoamerBase roamerAI = roamer.GetComponent<RoamerBase>();
+            RoamerPathDisplay pathDisplay = roamer.GetComponent<RoamerPathDisplay>();
             if (roamerAI != null)
             {
                 roamerAI.waypoints = new Transform[] {config.spawnPoint, config.targetPoint };
+                pathDisplay.waypoints = roamerAI.waypoints;
+                roamerAI.trustSlider = trustMeter;
             }
         }
     }
