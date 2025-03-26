@@ -14,6 +14,14 @@ public class CinemachineCameraController : MonoBehaviour
     [Tooltip("Distance in pixels from the screen edge to start moving the camera.")]
     public float edgeThreshold = 10f;
 
+    [Header("Horizontal Range")]
+    public float minX = -50f;
+    public float maxX = 50f;
+
+    [Header("Vertical Range")]
+    public float minY = -20f;
+    public float maxY = 20f;
+
     // To track the last mouse position during right mouse drag
     private Vector3 lastMousePosition;
 
@@ -43,6 +51,11 @@ public class CinemachineCameraController : MonoBehaviour
         else if (mousePos.y > Screen.height - edgeThreshold)
             edgeMove.y = 1;
         cameraFollowTarget.Translate(edgeMove.normalized * moveSpeed * Time.deltaTime, Space.World);
+
+        Vector3 pos = transform.position;
+        pos.x = Mathf.Clamp(pos.x, minX, maxX);
+        pos.y = Mathf.Clamp(pos.y, minY, maxY);
+        transform.position = pos;
 
         // --- Option 3: Right Mouse Button Drag ---
         if (Input.GetMouseButtonDown(1))

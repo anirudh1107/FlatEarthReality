@@ -19,13 +19,21 @@ public abstract class TileBase : MonoBehaviour
     [Tooltip("Grid cell size for snapping (assumed square).")]
     public float gridSize = 1f;
 
+    public GameObject boundrySprite;
+
     public SpriteRenderer tileSpriteRenderer;
 
     private void Start()
     {
+        boundrySprite = transform.GetChild(0).gameObject;
         if (tileSpriteRenderer == null)
         {
             tileSpriteRenderer = GetComponent<SpriteRenderer>();
+        }
+
+        if (!isStatic)
+        {
+           boundrySprite.SetActive(false);
         }
     }
 
